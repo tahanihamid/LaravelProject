@@ -19,3 +19,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::prefix('/admin')->name('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\AdminHomeController::class, 'index']);
 });
+    // Account Routes
+use App\Http\Controllers\AccountController;
+Route::middleware(['auth'])->group(function () {
+    Route::get('/account', [AccountController::class, 'index'])->name('account.index');
+    Route::get('/account/edit/{id}', [AccountController::class, 'edit'])->name('account.edit');
+    Route::put('/account/update/{id}', [AccountController::class, 'update'])->name('account.update');
+});
