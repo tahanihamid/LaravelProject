@@ -15,3 +15,7 @@ use App\Http\Controllers\AuthController;
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Admin Routes
+Route::prefix('/admin')->name('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\AdminHomeController::class, 'index']);
+});
