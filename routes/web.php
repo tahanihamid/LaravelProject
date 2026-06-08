@@ -18,6 +18,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     // Admin Routes
 Route::prefix('/admin')->name('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\AdminHomeController::class, 'index']);
+    Route::get('/product', [App\Http\Controllers\Admin\AdminProductController::class, 'index'])->name('admin.product.index');
 });
     // Account Routes
 use App\Http\Controllers\AccountController;
