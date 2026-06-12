@@ -47,13 +47,13 @@
         @foreach($products as $product)
         <div class="col-md-4 mb-4">
             <div class="card shadow">
-                <img src="{{ $product->image }}" alt="{{ $product->name }}">
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
                 <div class="p-3">
                     <h5 class="fw-bold">{{ $product->name }}</h5>
                     <p class="text-muted small">{{ $product->description }}</p>
                     <p style="color:#e75480;" class="fw-bold fs-5">${{ $product->price }}</p>
                     <button class="btn-pink"
-                        onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, '{{ $product->image }}')">
+                        onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, '{{ asset($product->image) }}')">
                         🛒 Add to Cart
                     </button>
                 </div>
