@@ -44,12 +44,16 @@
         <div class="col-7">
             <div class="card text-white mb-3" style="background-color:#c0506e;">
                 <div class="card-body">
-                    <h5 class="card-title">✨ New Arrivals</h5>
-                    <p class="card-text">Check the latest products</p>
-                </div>
-            </div>
+                  <div class="col-7s">
+    <div class="card text-white mb-3" style="background-color:#c0506e;">
+        <div class="card-body">
+            <h5 class="card-title">🗂️ Categories</h5>
+            <p class="card-text">Manage product categories</p>
+            <a href="{{ route('admin.category.index') }}" class="btn btn-light btn-sm">View</a>
         </div>
-        <div class="col-7s">
+    </div>
+</div>
+        <div class="col-7">
             <div class="card text-white mb-3" style="background-color:#a03050;">
                 <div class="card-body">
                     <h5 class="card-title">🛒 Orders</h5>
