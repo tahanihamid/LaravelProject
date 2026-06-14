@@ -49,11 +49,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-7">
+        <div class="col-7s">
             <div class="card text-white mb-3" style="background-color:#a03050;">
                 <div class="card-body">
                     <h5 class="card-title">🛒 Orders</h5>
                     <p class="card-text">View customer orders</p>
+                    <a href="{{ route('admin.orders.index') }}" class="btn btn-light btn-sm">View</a>
                 </div>
             </div>
         </div>

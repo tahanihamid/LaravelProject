@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Products - Glow Beauty</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -79,8 +80,37 @@
             <span>Total:</span>
             <span style="color:#e75480;">$<span id="cart-total">0.00</span></span>
         </div>
-        <button class="btn-pink mt-4" onclick="alert('Checkout coming soon!')">✅ Checkout</button>
+        <button class="btn-pink mt-4" onclick="openCheckout()">✅ Checkout</button>
+    <div class="modal fade" id="checkoutModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">📦 Complete Your Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Name</label>
+          <input type="text" id="checkout-name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Address</label>
+          <input type="text" id="checkout-address" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Payment Method</label>
+          <select id="checkout-payment" class="form-select">
+            <option value="cash">Cash</option>
+            <option value="card">Card</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-pink" onclick="submitOrder()">✅ Confirm Order</button>
+      </div>
     </div>
+  </div>
+</div>
 </div>
 
 <script>
@@ -151,7 +181,59 @@
         document.getElementById('cart-sidebar').classList.remove('open');
         document.getElementById('cart-overlay').classList.remove('show');
     }
-</script>
 
+    function openCheckout() {
+        if (Object.keys(cart).length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+        modal.show();
+    }
+
+    function submitOrder() {
+        const name = document.getElementById('checkout-name').value;
+        const address = document.getElementById('checkout-address').value;
+        const payment = document.getElementById('checkout-payment').value;
+
+        if (!name || !address) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        let total = 0;
+        Object.values(cart).forEach(item => total += item.price * item.qty);
+
+        fetch("{{ route('checkout') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                name: name,
+                address: address,
+                payment_method: payment,
+                items: JSON.stringify(cart),
+                total: total.toFixed(2)
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ Order placed successfully!');
+                cart = {};
+                updateCart();
+                closeCart();
+                bootstrap.Modal.getInstance(document.getElementById('checkoutModal')).hide();
+            } else {
+                alert('Something went wrong.');
+            }
+        })
+        .catch(() => alert('Error placing order.'));
+    }
+</script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

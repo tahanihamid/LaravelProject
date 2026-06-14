@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
+Route::post('/checkout', [OrderController::class, 'store'])->middleware('auth')->name('checkout');
 Route::get('/', function () {
     return view('welcome');
 });
@@ -16,10 +18,17 @@ Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     // Admin Routes
-Route::prefix('/admin')->name('admin')->middleware(['auth', 'role:admin'])->group(function () {
+Route::prefix('/admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\AdminHomeController::class, 'index']);
-    Route::get('/product', [App\Http\Controllers\Admin\AdminProductController::class, 'index'])->name('admin.product.index');
-});
+    Route::get('/product', [App\Http\Controllers\Admin\AdminProductController::class, 'index'])->name('product.index');
+    Route::get('/orders', [App\Http\Controllers\Admin\AdminOrderController::class, 'index'])->name('orders.index');
+
+     // category routes
+    Route::get('/categories', [App\Http\Controllers\Admin\AdminCategoryController::class, 'index'])->name('category.index');
+    Route::post('/categories', [App\Http\Controllers\Admin\AdminCategoryController::class, 'store'])->name('category.store');
+    Route::delete('/categories/{id}', [App\Http\Controllers\Admin\AdminCategoryController::class, 'destroy'])->name('category.destroy'); 
+}); 
+    
     // Account Routes
 use App\Http\Controllers\AccountController;
 Route::middleware(['auth'])->group(function () {
